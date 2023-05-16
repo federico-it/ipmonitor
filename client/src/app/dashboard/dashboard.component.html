@@ -1,0 +1,36 @@
+<div class="container">
+    <mat-form-field appearance="fill">
+      <mat-label>View</mat-label>
+      <mat-select [(ngModel)]="selectedView" (selectionChange)="generateCharts()">
+        <mat-option value="last10minutes">Last 10 Minutes</mat-option>
+        <mat-option value="lastday">Last 24 Hours</mat-option>
+        <mat-option value="lastweek">Last 7 Days</mat-option>
+        <mat-option value="alltime">All Time</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button style="margin-bottom: 16px;" mat-raised-button color="primary" (click)="openDialog()">Add Ping Check</button>
+    <div class="card-container">
+      <ng-container *ngFor="let pingCheck of pingChecks; let i = index">
+        <mat-card class="card">
+          <mat-card-content>
+            <h3>IP Address: {{ pingCheck.ipAddress }}</h3>
+            <p>Monitoring Interval: {{ pingCheck.interval / 1000 }} seconds</p>
+            <div class="status-container">
+              <span class="status-text" [ngClass]="{'online': pingCheck.status, 'offline': !pingCheck.status}">
+                {{ pingCheck.status ? 'Online' : 'Offline' }}
+              </span>
+              <mat-icon class="status-icon" [ngClass]="{'online-icon': pingCheck.status, 'offline-icon': !pingCheck.status}">
+                {{ pingCheck.status ? 'check_circle' : 'error' }}
+              </mat-icon>
+            </div>
+          </mat-card-content>
+          <mat-card-content>
+            <canvas [id]="'canvasRef' + i" #canvasRef width="400" height="200"></canvas>
+            <button mat-icon-button color="warn" (click)="openDeleteDialog(pingCheck._id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
+  

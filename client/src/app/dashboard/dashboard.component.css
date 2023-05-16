@@ -1,0 +1,63 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(900px, 2fr));
+    grid-gap: 1rem;
+    justify-items: center;
+  }
+  
+  .card {
+    width: 100%;
+  }
+  
+  .status-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .status-text {
+    margin-right: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .status-icon {
+    font-size: 1.5rem;
+    margin-top: -2px;
+  }
+  
+  .online-icon {
+    color: green;
+  }
+  
+  .offline-icon {
+    color: red;
+  }
+  
+  @media (max-width: 800px) {
+    .card-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .card {
+      min-width: 300px;
+      max-width: 100%;
+    }
+    
+    .status-container {
+      justify-content: center;
+    }
+    
+    .status-text {
+      margin-right: 0;
+    }
+    
+    .status-icon {
+      font-size: 1.2rem;
+    }
+  }
+  

@@ -1,0 +1,22 @@
+<div class="home-container">
+    <h1 class="title">IP Monitor</h1>
+    <p class="description">
+      Welcome to IP Monitor, the comprehensive and powerful application that enables you to monitor the status of IP addresses in real-time. With IP Monitor, you can effortlessly track the availability and responsiveness of any IP address, ensuring the continuous operation of your network infrastructure.
+    </p>
+    <p class="description">
+      Gain valuable insights into the connectivity and performance of your network by continuously monitoring the status of individual IP addresses. Whether you are managing a small home network or overseeing a large-scale enterprise environment, IP Monitor equips you with the essential tools to identify and address connectivity issues promptly.
+    </p>
+    <p class="description">
+      IP Monitor offers a user-friendly interface that displays real-time data and historical statistics, allowing you to visualize the uptime and latency trends of your monitored IP addresses. By proactively monitoring IP addresses, you can detect potential network disruptions, troubleshoot connectivity problems, and minimize costly downtime.
+    </p>
+    <p class="description">
+      Stay informed and in control with customizable notifications and alerts. Set threshold values for latency or define specific response patterns to be notified promptly whenever an IP address experiences abnormal behavior. IP Monitor empowers you to take immediate action, ensuring optimal network performance and minimizing the impact of network outages.
+    </p>
+    
+    <div class="button-container">
+      <button mat-raised-button *ngIf="!this.authService.isLoggedIn" [routerLink]="'/login'" color="primary">Login</button>
+      <button mat-raised-button *ngIf="!this.authService.isLoggedIn" [routerLink]="'/register'"color="accent">Register</button>
+      <button mat-raised-button (click)="logout()" *ngIf="this.authService.isLoggedIn" color="primary">Logout</button>
+    </div>
+  </div>
+  

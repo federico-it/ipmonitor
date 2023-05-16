@@ -1,0 +1,33 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button (click)="opened=!opened">
+      <mat-icon >menu</mat-icon>
+    </button>
+    <span>IPMonitor</span>
+    <span class="menu-spacer"></span>
+    <div>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav [(opened)]="opened" mode="side" style="background-color: #ffff; width: 22vh;" >
+    <mat-nav-list>
+
+      <a mat-list-item [routerLink]="'/home'">   Home   </a>
+      
+      <a mat-list-item *ngIf="this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/dashboard">   Dashboard   </a>
+      <a mat-list-item *ngIf="!this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/register">   Register  </a>
+      <a mat-list-item *ngIf="!this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/login">   Login  </a>
+      <a mat-list-item *ngIf="this.authService.isLoggedIn" [routerLink]="'/account'">   Account   </a>
+      <a mat-list-item (click)="logout()" *ngIf="this.authService.isLoggedIn">   Logout   </a>
+
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div style="height: 93.6vh; margin-top: 16px;">
+      <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+  </mat-sidenav-content>
+  
+</mat-sidenav-container>
