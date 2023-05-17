@@ -3,7 +3,7 @@
 IP Monitor is an application that allows you to monitor the status of IP addresses in real-time.
 
 
-![Screenshot 2023-05-17 alle 20 58 10](https://github.com/federico-it/ipmonitor/assets/113976723/70ea97a8-c905-4eac-be28-eec6ae8398fb)
+![Screenshot 2023-05-17 alle 20 58 10](https://github.com/federico-it/ipmonitor/assets/113976723/7e95cc48-8f43-4b01-a8e2-2a4c0f4646f4)
 ![Screenshot 2023-05-17 alle 20 58 49](https://github.com/federico-it/ipmonitor/assets/113976723/060d5135-2357-4fcc-9d2f-9cca8f485d29)
 ![Screenshot 2023-05-17 alle 20 59 21](https://github.com/federico-it/ipmonitor/assets/113976723/139bf2af-000a-46be-a101-938625f9f744)
 
