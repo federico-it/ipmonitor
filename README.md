@@ -2,6 +2,12 @@
 
 IP Monitor is an application that allows you to monitor the status of IP addresses in real-time.
 
+
+![Screenshot 2023-05-17 alle 20 58 10](https://github.com/federico-it/ipmonitor/assets/113976723/70ea97a8-c905-4eac-be28-eec6ae8398fb)
+![Screenshot 2023-05-17 alle 20 58 49](https://github.com/federico-it/ipmonitor/assets/113976723/060d5135-2357-4fcc-9d2f-9cca8f485d29)
+![Screenshot 2023-05-17 alle 20 59 21](https://github.com/federico-it/ipmonitor/assets/113976723/139bf2af-000a-46be-a101-938625f9f744)
+
+
 ## Features
 
 - Real-time monitoring of IP addresses
@@ -47,4 +53,5 @@ Make sure you have MongoDB installed and running locally or provide the connecti
 
 This project is licensed under the [MIT License](LICENSE).
 
-![ping.federicomengascini.com](https://i.ibb.co/3mXhrGj/Screenshot-2023-05-17-alle-20-49-12-2.png)
+![ipmonitor](https://github.com/federico-it/ipmonitor/assets/113976723/44f5908e-8e37-4095-9193-520931a5e75b)
+
