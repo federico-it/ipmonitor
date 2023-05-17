@@ -37,7 +37,7 @@ Make sure you have MongoDB installed and running locally or provide the connecti
 
 ## Usage
 
-1. Open your web browser and go to `http://localhost:4200`
+1. Open your web browser and go to `http://localhost:4200` or `http://<your-local-ip>:4200`
 2. Register a new account or log in if you already have an account
 3. Add IP addresses to monitor by clicking on the "Add IP Address" button
 4. Select the monitoring interval and enter the IP address
