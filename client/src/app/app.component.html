@@ -10,24 +10,23 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav [(opened)]="opened" mode="side" style="background-color: #ffff; width: 22vh;" >
+  <mat-sidenav [(opened)]="opened" mode="push" style="background-color: #ffff; width: 22vh;" >
     <mat-nav-list>
-
-      <a mat-list-item [routerLink]="'/home'">   Home   </a>
-      
-      <a mat-list-item *ngIf="this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/dashboard">   Dashboard   </a>
-      <a mat-list-item *ngIf="!this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/register">   Register  </a>
-      <a mat-list-item *ngIf="!this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/login">   Login  </a>
-      <a mat-list-item *ngIf="this.authService.isLoggedIn" [routerLink]="'/account'">   Account   </a>
-      <a mat-list-item (click)="logout()" *ngIf="this.authService.isLoggedIn">   Logout   </a>
-
+      <a mat-list-item [routerLink]="'/home'" (click)="closeSidenav()">Home</a>
+      <a mat-list-item *ngIf="this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/dashboard" (click)="closeSidenav()">Dashboard</a>
+      <a mat-list-item *ngIf="!this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/register" (click)="closeSidenav()">Register</a>
+      <a mat-list-item *ngIf="!this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/login" (click)="closeSidenav()">Login</a>
+      <a mat-list-item *ngIf="this.authService.isLoggedIn" [routerLink]="'/account'" (click)="closeSidenav()">Account</a>
+      <a mat-list-item (click)="logout()" *ngIf="this.authService.isLoggedIn" (click)="closeSidenav()">Logout</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div style="height: 93.6vh; margin-top: 16px;">
+    <div style=" margin-top: 16px; margin-bottom: 16px;">
       <router-outlet></router-outlet>
     </div>
-    <app-footer></app-footer>
+    <app-footer style="
+    bottom:0px;
+    width:100%;"></app-footer>
   </mat-sidenav-content>
   
 </mat-sidenav-container>

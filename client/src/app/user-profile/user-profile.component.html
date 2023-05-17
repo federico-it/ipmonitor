@@ -1,14 +1,17 @@
 <div class="user-profile-container">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>User Profile</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="user-details">
-          <p><strong>Name:</strong> {{ currentName }}</p>
-          <p><strong>Email:</strong> {{ currentMail }}</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>User Profile</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="user-details">
+        <p><strong>Name:</strong> {{ currentName }}</p>
+        <p><strong>Email:</strong> {{ currentMail }}</p>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button style="margin-right: 10px;" color="primary" (click)="openEditProfileDialog()">Modify Profile</button>
+      <button mat-raised-button color="accent" (click)="openChangePasswordDialog()">Update Password</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

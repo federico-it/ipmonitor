@@ -3,6 +3,8 @@ import { User } from './user';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../environments/environment';
+
 
 import {
   HttpClient,
@@ -14,10 +16,12 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-  endpoint: string = 'http://localhost:3000/api';
+  private endpoint!: string;
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   currentUser = {};
-  constructor(private http: HttpClient, public router: Router, private snackBar: MatSnackBar) {}
+  constructor(private http: HttpClient, public router: Router, private snackBar: MatSnackBar) {
+    this.endpoint = `${environment.apiUrl}/api`;
+  }
   // Sign-up
   signUp(user: User): Observable<any> {
     let api = `${this.endpoint}/users/register`;
@@ -73,6 +77,29 @@ export class AuthService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
     return this.http.get<any>(`${this.endpoint}/users/profile`, { headers });
+  }
+
+    // Update user profile
+    updateUserProfile(updatedProfile: any): Observable<any> {
+      const token = localStorage.getItem('access_token'); // Ottieni il token JWT memorizzato
+  
+      // Aggiungi il token JWT alle intestazioni della richiesta
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      
+      return this.http.patch<any>(`${this.endpoint}/users/update`, updatedProfile, { headers }).pipe(
+        catchError(this.handleError)
+      );
+    }
+
+      // Verify password
+  verifyPassword(password: string): Observable<any> {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const body = { password };
+
+    return this.http
+      .post<any>(`${this.endpoint}/users/verify-password`, body, { headers })
+      .pipe(catchError(this.handleError));
   }
   
   // Error

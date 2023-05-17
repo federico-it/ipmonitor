@@ -12,4 +12,7 @@ export class AppComponent {
   logout() {
     this.authService.doLogout()
   }
+  closeSidenav(): void {
+    this.opened = false;
+  }
 }

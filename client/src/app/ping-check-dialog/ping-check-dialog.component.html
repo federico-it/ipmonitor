@@ -4,11 +4,15 @@
   <mat-form-field>
     <mat-label>IP Address</mat-label>
     <input matInput formControlName="ipAddress" required>
+    <mat-error *ngIf="pingCheckForm.get('ipAddress')?.hasError('required')">IP Address is required</mat-error>
+  <mat-error *ngIf="pingCheckForm.get('ipAddress')?.hasError('invalidIpv4')">Invalid IPv4 Address</mat-error>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>Monitoring Interval (ms)</mat-label>
-    <input matInput type="number" formControlName="interval" required>
+    <input matInput formControlName="interval" placeholder="Interval">
+    <span matSuffix>seconds</span> <!-- Aggiungi il testo tra parentesi -->
+    <mat-hint >Interval in seconds</mat-hint> <!-- O come testo di supporto -->
+    <mat-error *ngIf="pingCheckForm.get('interval')?.hasError('required')">Interval is required</mat-error>
   </mat-form-field>
 
   <div class="dialog-actions">

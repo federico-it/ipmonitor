@@ -18,5 +18,6 @@
       <button mat-raised-button *ngIf="!this.authService.isLoggedIn" [routerLink]="'/register'"color="accent">Register</button>
       <button mat-raised-button (click)="logout()" *ngIf="this.authService.isLoggedIn" color="primary">Logout</button>
     </div>
+<div style="margin-top: 300px;"></div>
   </div>
   

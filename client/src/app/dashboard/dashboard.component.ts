@@ -9,6 +9,7 @@ import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DeletePingCheckDialogComponent } from '../delete-ping-check-dialog/delete-ping-check-dialog.component';
 import 'chartjs-adapter-moment';
+import { interval } from 'rxjs';
 import * as moment from 'moment';
 
 const MY_DATE_FORMATS = {
@@ -34,11 +35,20 @@ const MY_DATE_FORMATS = {
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
   pingChecks: PingCheck[] = [];
-  selectedView: string = 'last10minutes'; // Default selected view
+  selectedView: string = 'last5minutes'; // Default selected view
   @ViewChildren('canvasRef') canvasRefs!: QueryList<ElementRef<HTMLCanvasElement>>;
   @ViewChildren('canvasRef', { read: ElementRef }) canvasRefsArray!: QueryList<ElementRef<HTMLCanvasElement>>;
   chartInstances: any[] = [];
   dialogRef!: MatDialogRef<any>;
+  pollingInterval = 5000; // 5 secondi
+
+  startPolling(): void {
+    interval(5000) // Intervallo di 5 secondi
+      .subscribe(() => {
+        this.updateChartData();
+      });
+  }
+
 
 
   constructor(private pingCheckService: PingCheckService, private chartService: ChartService, private dialog: MatDialog, private formBuilder: FormBuilder) { }
@@ -58,8 +68,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.generateCharts();
+      this.startPolling();
     }, 250);
   }
+  
 
   generateCharts(): void {
     this.canvasRefsArray.forEach((canvasRef, index) => {
@@ -103,16 +115,55 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
         };
   
-        // Destroy existing chart if it exists
-        const existingChart = this.chartService.getChart(canvas);
-        if (existingChart) {
-          existingChart.destroy();
-        }
+        const chart = this.chartService.getChart(canvas);
   
-        this.chartService.generateChart(canvas, chartData);
+        if (chart) {
+          chart.data.labels = chartData.data.labels;
+          chart.data.datasets[0].data = chartData.data.datasets[0].data;
+          chart.update();
+        } else {
+          this.chartService.generateChart(canvas, chartData);
+        }
       }
     });
-  }  
+  }
+
+  updateChartData(): void {
+    this.pingCheckService.getPingChecks().subscribe(
+      (res: any) => {
+        const newPingChecks = res.pingChecks;
+        this.updateChartWithNewData(newPingChecks);
+      },
+      error => {
+        console.error(error);
+      }
+    );
+  }
+
+  updateChartWithNewData(newPingChecks: PingCheck[]): void {
+    this.canvasRefsArray.forEach((canvasRef, index) => {
+      const canvas = canvasRef.nativeElement;
+      const pingCheck = newPingChecks[index];
+  
+      if (canvas) {
+        const latencyHistory = this.filterLatencyHistoryByView(pingCheck.latencyHistory);
+        const latencyData = latencyHistory.map(latency => (latency.latency === 99999 ? null : latency.latency));
+        const checkedAtData = latencyHistory.map(latency => moment(latency.checkedAt).toDate());
+  
+        const chart = this.chartService.getChart(canvas);
+  
+        if (chart) {
+          chart.data.labels = checkedAtData;
+          chart.data.datasets[0].data = latencyData;
+          chart.update();
+        }
+      }
+    });
+  }
+  
+  
+  
+  
 
   ngOnDestroy(): void {
     // Distruggi tutti i grafici prima di uscire dal componente
@@ -132,75 +183,81 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       case 'last10minutes':
         startDate = now.clone().subtract(10, 'minutes');
         break;
+      case 'last5minutes':
+        startDate = now.clone().subtract(5, 'minutes');
+        break;
+      case 'lastminute':
+        startDate = now.clone().subtract(1, 'minute');
+        break;
       case 'lastday':
-startDate = now.clone().subtract(1, 'day');
-break;
-case 'lastweek':
-startDate = now.clone().subtract(1, 'week');
-break;
-case 'alltime':
-startDate = moment.min(latencyHistory.map(latency => moment(latency.checkedAt)));
-break;
-default:
-startDate = now.clone().subtract(10, 'minutes');
-}
-return latencyHistory.filter(latency => moment(latency.checkedAt).isAfter(startDate));
-}
-
-addPingCheck(): void {
-  this.openDialog();
-}
-
-openDialog(): void {
-  const dialogRef = this.dialog.open(PingCheckDialogComponent, {
-    width: '400px',
-    disableClose: true
-  });
-
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      const newPingCheck: PingCheckIns = {
-        ipAddress: result.ipAddress,
-        interval: result.interval
-      };
-
-      this.pingCheckService.createPingCheck(newPingCheck).subscribe(
-        (res: any) => {
-          this.pingChecks.push(res.pingCheck);
-        },
-        error => {
-          console.error(error);
-        }
-      );
+        startDate = now.clone().subtract(1, 'day');
+        break;
+      case 'lastweek':
+        startDate = now.clone().subtract(1, 'week');
+        break;
+      case 'alltime':
+        startDate = moment.min(latencyHistory.map(latency => moment(latency.checkedAt)));
+        break;
+      default:
+        startDate = now.clone().subtract(10, 'minutes');
     }
-  });
-}
+    return latencyHistory.filter(latency => moment(latency.checkedAt).isAfter(startDate));
+  }
 
-openDeleteDialog(pingCheckId: string): void {
-  const dialogRef = this.dialog.open(DeletePingCheckDialogComponent, {
-    width: '400px',
-    data: pingCheckId,
-    disableClose: true
-  });
+  addPingCheck(): void {
+    this.openDialog();
+  }
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result === 'delete') {
-      this.deletePingCheck(pingCheckId);
-    }
-  });
-}
+  openDialog(): void {
+    const dialogRef = this.dialog.open(PingCheckDialogComponent, {
+      width: '400px',
+      disableClose: true
+    });
 
-deletePingCheck(pingCheckId: string): void {
-  this.pingCheckService.deletePingCheck(pingCheckId).subscribe(
-    () => {
-      // Rimuovi il ping check dalla lista pingChecks
-      this.pingChecks = this.pingChecks.filter(pingCheck => pingCheck._id !== pingCheckId);
-    },
-    error => {
-      console.error(error);
-    }
-  );
-}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        const newPingCheck: PingCheckIns = {
+          ipAddress: result.ipAddress,
+          interval: result.interval
+        };
+
+        this.pingCheckService.createPingCheck(newPingCheck).subscribe(
+          (res: any) => {
+            this.pingChecks.push(res.pingCheck);
+          },
+          error => {
+            console.error(error);
+          }
+        );
+      }
+    });
+  }
+
+  openDeleteDialog(pingCheckId: string): void {
+    const dialogRef = this.dialog.open(DeletePingCheckDialogComponent, {
+      width: '400px',
+      data: pingCheckId,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'delete') {
+        this.deletePingCheck(pingCheckId);
+      }
+    });
+  }
+
+  deletePingCheck(pingCheckId: string): void {
+    this.pingCheckService.deletePingCheck(pingCheckId).subscribe(
+      () => {
+        // Rimuovi il ping check dalla lista pingChecks
+        this.pingChecks = this.pingChecks.filter(pingCheck => pingCheck._id !== pingCheckId);
+      },
+      error => {
+        console.error(error);
+      }
+    );
+  }
 
 
 

@@ -2,14 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PingCheck, PingCheckIns} from './models/ping-check.model';
+import { environment } from '../environments/environment';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class PingCheckService {
-  private endpoint = `http://localhost:3000/api/ping`;
+  private endpoint!: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.endpoint = `${environment.apiUrl}/api/ping`;
+  }
 
   // Ottieni tutti i monitor di ping dell'utente corrente
   getPingChecks(): Observable<PingCheck[]> {

@@ -19,7 +19,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: '*',
   credentials: true
 }));
 app.use(bodyParser.json());

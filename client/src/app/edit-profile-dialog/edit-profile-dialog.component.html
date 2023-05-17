@@ -1,0 +1,27 @@
+<h2>Edit Profile</h2>
+
+<form [formGroup]="profileForm">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" required>
+    <mat-error *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched">
+      Name is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" required>
+    <mat-error *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+      Email is required
+    </mat-error>
+    <mat-error *ngIf="profileForm.get('email')?.hasError('invalidEmail') && profileForm.get('email')?.touched">
+        Invalid email format
+      </mat-error>
+  </mat-form-field>
+
+  <div class="dialog-actions">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="profileForm.invalid">Save</button>
+  </div>
+</form>

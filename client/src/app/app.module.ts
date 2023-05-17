@@ -30,6 +30,8 @@ import { PingCheckDialogComponent } from './ping-check-dialog/ping-check-dialog.
 import { MatDialogModule } from '@angular/material/dialog';
 import { DeletePingCheckDialogComponent } from './delete-ping-check-dialog/delete-ping-check-dialog.component';
 import { FooterComponent } from './footer/footer.component';
+import { EditProfileDialogComponent } from './edit-profile-dialog/edit-profile-dialog.component';
+import { ChangePasswordDialogComponent } from './change-password-dialog/change-password-dialog.component';
 
 
 export const MY_FORMATS = {
@@ -55,6 +57,8 @@ export const MY_FORMATS = {
     PingCheckDialogComponent,
     DeletePingCheckDialogComponent,
     FooterComponent,
+    EditProfileDialogComponent,
+    ChangePasswordDialogComponent,
   ],
   imports: [
     BrowserModule,

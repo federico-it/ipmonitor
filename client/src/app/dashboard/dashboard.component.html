@@ -2,6 +2,8 @@
     <mat-form-field appearance="fill">
       <mat-label>View</mat-label>
       <mat-select [(ngModel)]="selectedView" (selectionChange)="generateCharts()">
+        <mat-option value="lastminute">Last 1 Minute</mat-option>
+        <mat-option value="last5minutes">Last 5 Minutes</mat-option>
         <mat-option value="last10minutes">Last 10 Minutes</mat-option>
         <mat-option value="lastday">Last 24 Hours</mat-option>
         <mat-option value="lastweek">Last 7 Days</mat-option>

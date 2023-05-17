@@ -142,6 +142,38 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+exports.verifyPassword = async (req, res, next) => {
+  try {
+    const { password } = req.body;
+    const token = getToken(req)
+
+    // Verifica se la password e il token sono presenti
+    if (!password || !token) {
+      return res.status(400).json({ message: 'Missing password or token' });
+    }
+
+    // Decodifica il token JWT
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Trova l'utente corrispondente all'ID nel token
+    const user = await User.findById(decoded.userId);
+
+    // Verifica se l'utente esiste
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Verifica se la password è corretta
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    res.status(200).json({ isPasswordCorrect });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
 exports.getUserByToken = async (req, res) => {
   try {
     const token = getToken(req);
