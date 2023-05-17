@@ -30,6 +30,7 @@ IP Monitor is an application that allows you to monitor the status of IP address
 6. Open a new terminal window
 7. Navigate to the client directory: `cd ipmonitor/client`
 8. Install client dependencies: `npm install`
+9. Navigate to environments folder : `cd src/environments` and create a `environment.ts` file based on the provided `example.environment.ts` and configure your environment variables
 9. Start the client: `ng serve`
 
 Make sure you have MongoDB installed and running locally or provide the connection details in the `.env` file.
