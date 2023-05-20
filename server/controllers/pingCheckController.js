@@ -1,5 +1,8 @@
 const PingCheck = require('../models/pingCheck');
+const PingCheckStatus = require('../models/pingCheckStatus');
 const ping = require('ping');
+const cron = require('node-cron');
+
 
 const createPingCheck = async (req, res) => {
   const { ipAddress, interval } = req.body;
@@ -63,6 +66,23 @@ const checkAllPings = async () => {
     }
   }
 };
+
+// Funzione per eseguire la cancellazione delle occorrenze più vecchie di un giorno
+const deleteOldPingChecks = async () => {
+  const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000); // Calcola una data un giorno fa
+  try {
+    await PingCheck.deleteMany({ lastCheck: { $lt: oneDayAgo } });
+    console.log('Old ping checks deleted');
+  } catch (error) {
+    console.error('Error deleting old ping checks:', error);
+  }
+};
+
+// Pianifica l'esecuzione della funzione ogni giorno 
+cron.schedule('0 0 * * *', deleteOldPingChecks); 
+
+
+
 
 
 setInterval(checkAllPings, 1000); // Check all pings every 1 seconds

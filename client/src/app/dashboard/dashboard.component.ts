@@ -192,12 +192,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       case 'lastday':
         startDate = now.clone().subtract(1, 'day');
         break;
-      case 'lastweek':
-        startDate = now.clone().subtract(1, 'week');
-        break;
-      case 'alltime':
-        startDate = moment.min(latencyHistory.map(latency => moment(latency.checkedAt)));
-        break;
       default:
         startDate = now.clone().subtract(10, 'minutes');
     }
