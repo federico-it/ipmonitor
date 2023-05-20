@@ -1,5 +1,4 @@
 const PingCheck = require('../models/pingCheck');
-const PingCheckStatus = require('../models/pingCheckStatus');
 const ping = require('ping');
 const cron = require('node-cron');
 
