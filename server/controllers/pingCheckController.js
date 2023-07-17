@@ -68,14 +68,22 @@ const checkAllPings = async () => {
 
 // Funzione per eseguire la cancellazione delle occorrenze più vecchie di un giorno
 const deleteOldPingChecks = async () => {
-  const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000); // Calcola una data un giorno fa
+  const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
   try {
-    await PingCheck.deleteMany({ lastCheck: { $lt: oneDayAgo } });
+    const pingChecks = await PingCheck.find({});
+    for (let pingCheck of pingChecks) {
+      // Filtra l'array latencyHistory mantenendo solo le occorrenze più recenti di un giorno fa
+      pingCheck.latencyHistory = pingCheck.latencyHistory.filter(
+        (entry) => entry.timestamp >= oneDayAgo
+      );
+      await pingCheck.save();
+    }
     console.log('Old ping checks deleted');
   } catch (error) {
     console.error('Error deleting old ping checks:', error);
   }
 };
+
 
 // Pianifica l'esecuzione della funzione ogni giorno 
 cron.schedule('0 0 * * *', deleteOldPingChecks); 

@@ -57,7 +57,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.pingCheckService.getPingChecks().subscribe(
       (res: any) => {
         this.pingChecks = res.pingChecks;
-        console.log(this.pingChecks.length);
       },
       error => {
         console.error(error);
